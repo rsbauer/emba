@@ -1,8 +1,10 @@
 import os
 import re
-import unicodedata
 
-NOTES_DIR = "010 Notes"  # Update this if your notes folder has a different path
+NOTES_DIR = "010 Notes"
+
+# Global dictionary to map note titles to their actual relative file paths
+note_map = {}
 
 def sanitize_front_matter(content):
     """Fixes common YAML front matter issues like unquoted titles with colons."""
@@ -30,53 +32,51 @@ def sanitize_front_matter(content):
     fixed_fm = "\n".join(fixed_lines)
     return f"---{fixed_fm}---{body}"
 
-def slugify(value):
-    """Converts a string or path segment into a lowercase, URL-friendly slug."""
-    value = str(value)
-    # Normalize unicode characters
-    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
-    # Replace ampersands with 'and' for cleaner filenames
-    value = value.replace('&', 'and')
-    # Remove characters that aren't alphanumeric, spaces, hyphens, or slashes
-    value = re.sub(r'[^\w\s\-/]', '', value)
-    # Replace whitespace and multiple hyphens with a single hyphen
-    value = re.sub(r'[-\s]+', '-', value).strip('-')
-    return value.lower()
-
-def slugify_target(target):
-    """Handles wiki-link targets that may include subfolders (e.g., Folder/Note Name)."""
-    parts = target.split('/')
-    slugged_parts = [slugify(p) for p in parts]
-    return '/'.join(slugged_parts)
-
-def convert_wikilinks(body):
-    """Converts Obsidian wiki-links to standard markdown links with slugified targets."""
+def build_note_map():
+    """Scans the notes directory and maps note base names to their actual relative paths."""
+    if not os.path.exists(NOTES_DIR):
+        return
     
-    def replace_pipe(match):
-        target = match.group(1).strip()
-        label = match.group(2).strip()
-        slug = slugify_target(target)
-        return f'[{label}]({slug}.md)'
+    for root, _, files in os.walk(NOTES_DIR):
+        for file in files:
+            if file.endswith(".md"):
+                rel_path = os.path.relpath(os.path.join(root, file), start=".")
+                # Store by filename without extension, and full name
+                base_name = os.path.splitext(file)[0].lower()
+                note_map[base_name] = rel_path
+                note_map[file.lower()] = rel_path
 
-    def replace_simple(match):
-        target = match.group(1).strip()
-        slug = slugify_target(target)
-        return f'[{target}]({slug}.md)'
-
-    # Pattern for [[Target|Display Text]]
-    pipe_pattern = re.compile(r'\[\[([^|\]]+)\|([^\]]+)\]\]')
-    body = pipe_pattern.sub(replace_pipe, body)
-
-    # Pattern for [[Target]]
-    simple_pattern = re.compile(r'\[\[([^\]]+)\]\]')
-    body = simple_pattern.sub(replace_simple, body)
+def convert_wikilinks(body, current_file_path):
+    """Converts Obsidian wiki-links to point to the exact real file paths."""
     
-    return body
+    def replace_link(match):
+        target = match.group(1).strip()
+        label = match.group(2).strip() if match.lastindex >= 2 and match.group(2) else target
+        
+        # Clean target lookup
+        lookup_key = os.path.basename(target).lower()
+        if not lookup_key.endswith(".md"):
+            lookup_key += ".md"
+            
+        if lookup_key in note_map:
+            target_path = note_map[lookup_key]
+            # Calculate relative path from current file to target file
+            current_dir = os.path.dirname(current_file_path)
+            rel_to_target = os.path.relpath(target_path, start=current_dir)
+            # Normalize path separators for web/markdown links
+            rel_to_target = rel_to_target.replace("\\", "/")
+            return f'[{label}]({rel_to_target})'
+        else:
+            # Fallback if note isn't found in index
+            return f'[{label}]({target}.md)'
+
+    # Pattern for [[Target|Display Text]] or [[Target]]
+    pattern = re.compile(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]')
+    return pattern.sub(replace_link, body)
 
 def convert_callouts(body):
-    """Converts Obsidian callouts (> [!NOTE]) into styled blockquotes."""
+    """Converts Obsidian callouts into styled blockquotes."""
     callout_pattern = re.compile(r'>\s*\[!(\w+)\](?:\s+(.*))?')
-    
     lines = body.splitlines()
     new_lines = []
     
@@ -102,11 +102,11 @@ def process_file(file_path):
         if len(parts) >= 3:
             front_matter = f"---{parts[1]}---"
             body = parts[2]
-            body = convert_wikilinks(body)
+            body = convert_wikilinks(body, file_path)
             body = convert_callouts(body)
             content = front_matter + body
     else:
-        content = convert_wikilinks(content)
+        content = convert_wikilinks(content, file_path)
         content = convert_callouts(content)
 
     if content != original_content:
@@ -118,6 +118,9 @@ def main():
     if not os.path.exists(NOTES_DIR):
         print(f"Directory {NOTES_DIR} not found. Skipping note sanitization.")
         return
+
+    print("Building note map...")
+    build_note_map()
 
     for root, _, files in os.walk(NOTES_DIR):
         for file in files:
