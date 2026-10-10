@@ -1,5 +1,5 @@
 ---
-modified: 2026-10-10T12:19
+modified: 2026-10-10T17:16
 created: 2026-07-17T21:34
 ---
 
@@ -15,6 +15,15 @@ created: 2026-07-17T21:34
 ## Agenda
 
 ## Tags
+* #microeconomics
+* #production
+* #costs
+* #shortRun
+* #longRun
+* #productivity
+* #factorsOfProduction
+* #profitMaximization
+* #studyNotes
 
 ## Summary
 
@@ -152,6 +161,5 @@ Average Variable Cost = wages * labor / quantity
 Marginal cost (MC) = change in total cost / quantity change
 
 Video will be posted to review this content
-
 
 

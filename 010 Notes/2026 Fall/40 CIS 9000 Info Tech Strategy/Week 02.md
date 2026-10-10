@@ -1,5 +1,5 @@
 ---
-modified: 2026-10-10T16:32
+modified: 2026-10-10T17:16
 created: 2026-07-17T21:34
 ---
 
@@ -13,6 +13,7 @@ created: 2026-07-17T21:34
 
 - [ ] 2 readings - information economics
 - [ ] Share opinions with what you read by email ?
+- [ ] project info posted
 ## Agenda
 
 ## Tags
@@ -33,6 +34,8 @@ Project proposals should be run by prof.
 
 MCP, RAG, API - to be discussed next week
 
+AI to sell products?
+
 # Fresh Direct
 
 # Zara
@@ -52,6 +55,14 @@ MCP, RAG, API - to be discussed next week
 # From retail to calalogs to QVC
 
 benefits of live stream shopping
+
+
+# Pricing and Business Models
+
+# Understanding Auction Theory
+
+double-sided auction - stock market works this way
+
 
 
 
