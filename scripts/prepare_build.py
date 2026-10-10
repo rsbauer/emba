@@ -48,7 +48,7 @@ def rename_in_staging():
                 os.rename(old_dir_path, new_dir_path)
 
 def process_staging_notes():
-    """Processes front matter, wikilinks, callouts, and handles crash-prone files."""
+    """Processes front matter, wikilinks, and callouts while preserving LaTeX."""
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
     if not os.path.exists(notes_build_path):
         return
@@ -69,10 +69,8 @@ def process_staging_notes():
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
 
-                # 1. Sanitize & Ensure Front Matter Exists
                 if not content.startswith("---"):
-                    # If a note lacks front matter entirely, Kramdown can choke on raw headers/math
-                    content = "---\nlayout: default\npublished: true\n---\n" + content
+                    content = "---\nlayout: default\n---\n" + content
 
                 parts = content.split("---", 2)
                 if len(parts) >= 3:
@@ -81,8 +79,6 @@ def process_staging_notes():
                     
                     lines = fm.splitlines()
                     fixed_fm = []
-                    has_published = False
-                    
                     for line in lines:
                         if line.startswith("title:") and ":" in line[6:]:
                             _, val = line.split(":", 1)
@@ -90,21 +86,11 @@ def process_staging_notes():
                             if not (val.startswith('"') and val.endswith('"')):
                                 val_escaped = val.replace('"', '\\"')
                                 line = f'title: "{val_escaped}"'
-                        if line.startswith("published:"):
-                            has_published = True
                         fixed_fm.append(line)
-
-                    # If this specific statistics foundations file is crashing the build, 
-                    # temporarily bypass it by setting published: false
-                    if "2026-07-18" in file or "statistics" in file.lower():
-                        if not has_published:
-                            fixed_fm.append("published: false")
-                        else:
-                            fixed_fm = [f"published: false" if l.startswith("published:") else l for l in fixed_fm]
 
                     fm = "\n".join(fixed_fm)
 
-                    # 2. Convert Wikilinks
+                    # Convert Wikilinks
                     def replace_wikilink(match):
                         target = match.group(1).strip()
                         label = match.group(2).strip() if match.lastindex >= 2 and match.group(2) else target
@@ -120,7 +106,7 @@ def process_staging_notes():
 
                     body = re.sub(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]', replace_wikilink, body)
 
-                    # 3. Convert Callouts
+                    # Convert Callouts
                     body = re.sub(r'>\s*\[!(\w+)\](?:\s+(.*))?', r'> **\2**', body)
 
                     content = f"---{fm}---{body}"
