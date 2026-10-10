@@ -1,0 +1,178 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Robert Bauer//EMBA 45 Fall 2026//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:EMBA 45 - Fall 2026
+X-WR-TIMEZONE:America/New_York
+BEGIN:VTIMEZONE
+TZID:America/New_York
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0500
+TZOFFSETTO:-0400
+TZNAME:EDT
+DTSTART:20070311T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0400
+TZOFFSETTO:-0500
+TZNAME:EST
+DTSTART:20071104T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+UID:emba45-orientation@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;VALUE=DATE:20260821
+DTEND;VALUE=DATE:20260823
+SUMMARY:EMBA 45 Orientation
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:EMBA 45 Orientation (Aug 21-22). Times TBD.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20260829@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20260829T083000
+DTEND;TZID=America/New_York:20260829T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20260919@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20260919T083000
+DTEND;TZID=America/New_York:20260919T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20260926@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20260926T083000
+DTEND;TZID=America/New_York:20260926T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261003@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261003T083000
+DTEND;TZID=America/New_York:20261003T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / CIS 9000
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261010@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261010T083000
+DTEND;TZID=America/New_York:20261010T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261017@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261017T083000
+DTEND;TZID=America/New_York:20261017T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / CIS 9000
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261024@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261024T083000
+DTEND;TZID=America/New_York:20261024T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / CIS 9000
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261031@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261031T083000
+DTEND;TZID=America/New_York:20261031T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / CIS 9000
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261107@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261107T083000
+DTEND;TZID=America/New_York:20261107T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261114@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261114T083000
+DTEND;TZID=America/New_York:20261114T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / CIS 9000
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261121@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261121T083000
+DTEND;TZID=America/New_York:20261121T171500
+SUMMARY:EMBA Class Day - STA 9708 / ZEP 9410 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- STA 9708 Managerial Statistics (Prof. Robert Stinerock)\n- ZEP 9410 Managerial Economics for Executives (Prof. Tracy Henry)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261205@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261205T083000
+DTEND;TZID=America/New_York:20261205T171500
+SUMMARY:EMBA Class Day - CIS 9000 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261212@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261212T083000
+DTEND;TZID=America/New_York:20261212T171500
+SUMMARY:EMBA Class Day - CIS 9000 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.\n\nHoliday Party this evening (time TBD).
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-20261219@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;TZID=America/New_York:20261219T083000
+DTEND;TZID=America/New_York:20261219T171500
+SUMMARY:EMBA Class Day - CIS 9000 / ZEP 9220
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Courses meeting today:\n- CIS 9000 Information Technology Strategy (Prof. Jaime Flomenbaum)\n- ZEP 9220 Communication Skills and Executive Presence (Prof. Mark Misercola)\n\nBreakfast 7:45am. Class 8:30am-5:15pm.\n\nLast class day of the Fall 2026 term.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-mentoring-night@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;VALUE=DATE:20261021
+DTEND;VALUE=DATE:20261022
+SUMMARY:EMBA 45 Mentoring Night
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Mentoring Night. Time TBD.
+END:VEVENT
+BEGIN:VEVENT
+UID:emba45-holiday-party@baruch
+DTSTAMP:20260701T000000Z
+DTSTART;VALUE=DATE:20261212
+DTEND;VALUE=DATE:20261213
+SUMMARY:EMBA 45 Holiday Party
+LOCATION:Baruch College NVC (Room TBD)
+DESCRIPTION:Holiday Party (Dec 12). Time TBD.
+END:VEVENT
+END:VCALENDAR

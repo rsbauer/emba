@@ -1,0 +1,5 @@
+---
+modified: 2026-09-19T18:17
+created: 2026-09-19T18:17
+---
+I have selected Sabastian Thrun as a leader who I think is a good communicator.  Thrun is a successful computer scientist who has developed and led multiple high level projects.  For example, he led a team which one the $2 million dollar DARPA robot challenge to build an autonomous vehicle for 60 miles over challenging terrain while being documented for a PBS Special (“The Great Robot Race”).  Thrun is known for developing Google Maps. Google StreetView, Google Glass, starting Google X and many other Google projects.  He has since left Google to start Udacity, an online education website and an autonomous flight company named Kitty Hawk.  He has found success running cutting edge projects, which requires communicating to various stakeholders of various technical capabilities, such as fellow computer scientists to the general public in the PBS Special.  He has found a way to communicate technical and complex ideas in ways to successful execute projects or get project funding.  I’d like to study him further to understand how he’s able to effectively communicate these technical and complex ideas.
