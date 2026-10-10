@@ -48,7 +48,7 @@ def rename_in_staging():
                 os.rename(old_dir_path, new_dir_path)
 
 def process_staging_notes():
-    """Processes front matter, wikilinks, and callouts while preserving LaTeX."""
+    """Processes front matter, wikilinks, callouts, and disables Liquid parsing to protect LaTeX."""
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
     if not os.path.exists(notes_build_path):
         return
@@ -70,7 +70,7 @@ def process_staging_notes():
                     content = f.read()
 
                 if not content.startswith("---"):
-                    content = "---\nlayout: default\n---\n" + content
+                    content = "---\nlayout: default\nrender_with_liquid: false\n---\n" + content
 
                 parts = content.split("---", 2)
                 if len(parts) >= 3:
@@ -79,6 +79,8 @@ def process_staging_notes():
                     
                     lines = fm.splitlines()
                     fixed_fm = []
+                    has_liquid_setting = False
+                    
                     for line in lines:
                         if line.startswith("title:") and ":" in line[6:]:
                             _, val = line.split(":", 1)
@@ -86,7 +88,12 @@ def process_staging_notes():
                             if not (val.startswith('"') and val.endswith('"')):
                                 val_escaped = val.replace('"', '\\"')
                                 line = f'title: "{val_escaped}"'
+                        if "render_with_liquid" in line:
+                            has_liquid_setting = True
                         fixed_fm.append(line)
+
+                    if not has_liquid_setting:
+                        fixed_fm.append("render_with_liquid: false")
 
                     fm = "\n".join(fixed_fm)
 
