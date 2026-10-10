@@ -52,7 +52,6 @@ def rename_and_deduplicate():
                     os.rename(old_dir_path, new_dir_path)
 
 def clean_front_matter(fm_text):
-    """Safely cleans and quotes YAML front matter fields to prevent parsing errors."""
     lines = fm_text.splitlines()
     fixed_lines = []
     has_liquid = False
@@ -73,11 +72,9 @@ def clean_front_matter(fm_text):
             key = key.strip()
             val = val.strip()
 
-            # Prevent YAML alias errors if value starts with '*'
             if val.startswith('*'):
                 val = f'"{val}"'
 
-            # Ensure string values with spaces, colons, or quotes are safely double-quoted
             if not ((val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'"))):
                 val_escaped = val.replace('"', '\\"')
                 val = f'"{val_escaped}"'
@@ -96,6 +93,19 @@ def clean_front_matter(fm_text):
 def convert_obsidian_math(body):
     inline_math_pattern = re.compile(r'(?<!\$)\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\$)')
     return inline_math_pattern.sub(r'\\(\1\\)', body)
+
+def sanitize_liquid_tags(body):
+    """Safely escapes unclosed or malformed Liquid tag sequences in markdown bodies."""
+    # Replaces standalone '{%' that lack a matching '%}' with safe text or escaped raw tags
+    # A simple approach is wrapping unclosed tag blocks or escaping raw curly braces if needed
+    lines = body.splitlines()
+    sanitized_lines = []
+    for line in lines:
+        # If a line contains '{%' but no '%}' and isn't a valid complete tag, neutralize it
+        if '{%' in line and '%}' not in line:
+            line = line.replace('{%', '&#123;%')
+        sanitized_lines.append(line)
+    return "\n".join(sanitized_lines)
 
 def process_staging_notes():
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
@@ -127,8 +137,8 @@ def process_staging_notes():
                     fm = clean_front_matter(parts[1])
                     body = parts[2]
 
-                    # Convert inline math, wikilinks, and callouts
                     body = convert_obsidian_math(body)
+                    body = sanitize_liquid_tags(body)
 
                     def replace_wikilink(match):
                         target = match.group(1).strip()
@@ -157,6 +167,6 @@ if __name__ == "__main__":
     build_staging()
     print("Slugifying and deduplicating in staging...")
     rename_and_deduplicate()
-    print("Processing and sanitizing notes content...")
+    print("Processing, sanitizing front matter and liquid tags...")
     process_staging_notes()
     print("Staging preparation complete.")
