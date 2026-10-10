@@ -21,7 +21,6 @@ def build_staging():
     if os.path.exists(BUILD_DIR):
         shutil.rmtree(BUILD_DIR)
     
-    # Copy repo, ignoring build artifacts, git, and scripts
     ignore_list = {'.git', '_site', BUILD_DIR, '.github', 'scripts'}
     shutil.copytree(SOURCE_DIR, BUILD_DIR, ignore=shutil.ignore_patterns(*ignore_list))
 
@@ -49,12 +48,11 @@ def rename_in_staging():
                 os.rename(old_dir_path, new_dir_path)
 
 def process_staging_notes():
-    """Processes front matter, wikilinks, callouts, and wraps body in raw tags."""
+    """Processes front matter, wikilinks, and callouts without raw tag interference."""
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
     if not os.path.exists(notes_build_path):
         return
 
-    # Build index of slugified files for link resolution
     slug_map = {}
     for root, _, files in os.walk(notes_build_path):
         for file in files:
@@ -108,10 +106,6 @@ def process_staging_notes():
 
                         # 3. Convert Callouts
                         body = re.sub(r'>\s*\[!(\w+)\](?:\s+(.*))?', r'> **\2**', body)
-
-                        # 4. Protect math/LaTeX/curly braces from Jekyll Liquid engine
-                        if "{% raw %}" not in body:
-                            body = f"\n{{% raw %}}\n{body}\n{{% endraw %}}\n"
 
                         content = f"---{fm}---{body}"
 
