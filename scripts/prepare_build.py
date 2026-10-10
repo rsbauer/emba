@@ -26,7 +26,6 @@ def rename_and_deduplicate():
     if not os.path.exists(notes_build_path):
         return
 
-    # 1. Slugify all files and folders bottom-up
     for root, dirs, files in os.walk(notes_build_path, topdown=False):
         for file in files:
             if file.endswith(".md"):
@@ -43,7 +42,6 @@ def rename_and_deduplicate():
             new_dir_path = os.path.join(root, new_dir_name)
             if old_dir_path != new_dir_path:
                 if os.path.exists(new_dir_path):
-                    # Merge contents if duplicate directory slug already exists
                     for item in os.listdir(old_dir_path):
                         s_item = os.path.join(old_dir_path, item)
                         d_item = os.path.join(new_dir_path, item)
@@ -52,6 +50,52 @@ def rename_and_deduplicate():
                     shutil.rmtree(old_dir_path)
                 else:
                     os.rename(old_dir_path, new_dir_path)
+
+def clean_front_matter(fm_text):
+    """Safely cleans and quotes YAML front matter fields to prevent parsing errors."""
+    lines = fm_text.splitlines()
+    fixed_lines = []
+    has_liquid = False
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#'):
+            fixed_lines.append(line)
+            continue
+
+        if "render_with_liquid" in line:
+            has_liquid = True
+            fixed_lines.append("render_with_liquid: false")
+            continue
+
+        if ":" in line:
+            key, val = line.split(":", 1)
+            key = key.strip()
+            val = val.strip()
+
+            # Prevent YAML alias errors if value starts with '*'
+            if val.startswith('*'):
+                val = f'"{val}"'
+
+            # Ensure string values with spaces, colons, or quotes are safely double-quoted
+            if not ((val.startswith('"') and val.endswith('"')) or (val.startswith("'") and val.endswith("'"))):
+                val_escaped = val.replace('"', '\\"')
+                val = f'"{val_escaped}"'
+
+            fixed_lines.append(f"{key}: {val}")
+        else:
+            if stripped:
+                val_escaped = stripped.replace('"', '\\"')
+                fixed_lines.append(f'title: "{val_escaped}"')
+
+    if not has_liquid:
+        fixed_lines.append("render_with_liquid: false")
+
+    return "\n".join(fixed_lines)
+
+def convert_obsidian_math(body):
+    inline_math_pattern = re.compile(r'(?<!\$)\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\$)')
+    return inline_math_pattern.sub(r'\\(\1\\)', body)
 
 def process_staging_notes():
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
@@ -74,32 +118,17 @@ def process_staging_notes():
                 with open(file_path, 'r', encoding='utf-8') as f:
                     content = f.read()
 
+                content = content.lstrip()
                 if not content.startswith("---"):
                     content = "---\nlayout: default\nrender_with_liquid: false\n---\n" + content
 
-                parts = content.startswith("---") and content.split("---", 2) or []
+                parts = content.split("---", 2)
                 if len(parts) >= 3:
-                    fm = parts[1]
+                    fm = clean_front_matter(parts[1])
                     body = parts[2]
-                    
-                    lines = fm.splitlines()
-                    fixed_fm = []
-                    has_liquid = False
-                    for line in lines:
-                        if line.startswith("title:") and ":" in line[6:]:
-                            _, val = line.split(":", 1)
-                            val = val.strip()
-                            if not (val.startswith('"') and val.endswith('"')):
-                                val_escaped = val.replace('"', '\\"')
-                                line = f'title: "{val_escaped}"'
-                        if "render_with_liquid" in line:
-                            has_liquid = True
-                        fixed_fm.append(line)
 
-                    if not has_liquid:
-                        fixed_fm.append("render_with_liquid: false")
-
-                    fm = "\n".join(fixed_fm)
+                    # Convert inline math, wikilinks, and callouts
+                    body = convert_obsidian_math(body)
 
                     def replace_wikilink(match):
                         target = match.group(1).strip()
@@ -118,7 +147,7 @@ def process_staging_notes():
                     body = re.sub(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]', replace_wikilink, body)
                     body = re.sub(r'>\s*\[!(\w+)\](?:\s+(.*))?', r'> **\2**', body)
 
-                    content = f"---{fm}---{body}"
+                    content = f"---\n{fm}\n---{body}"
 
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
@@ -128,6 +157,6 @@ if __name__ == "__main__":
     build_staging()
     print("Slugifying and deduplicating in staging...")
     rename_and_deduplicate()
-    print("Processing notes content...")
+    print("Processing and sanitizing notes content...")
     process_staging_notes()
     print("Staging preparation complete.")
