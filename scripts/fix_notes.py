@@ -2,8 +2,6 @@ import os
 import re
 
 NOTES_DIR = "010 Notes"
-
-# Global dictionary to map note titles to their actual relative file paths
 note_map = {}
 
 def sanitize_front_matter(content):
@@ -33,7 +31,7 @@ def sanitize_front_matter(content):
     return f"---{fixed_fm}---{body}"
 
 def build_note_map():
-    """Scans the notes directory and maps note base names to their actual relative paths."""
+    """Scans notes and maps filenames to real relative paths."""
     if not os.path.exists(NOTES_DIR):
         return
     
@@ -41,36 +39,29 @@ def build_note_map():
         for file in files:
             if file.endswith(".md"):
                 rel_path = os.path.relpath(os.path.join(root, file), start=".")
-                # Store by filename without extension, and full name
                 base_name = os.path.splitext(file)[0].lower()
                 note_map[base_name] = rel_path
                 note_map[file.lower()] = rel_path
 
 def convert_wikilinks(body, current_file_path):
-    """Converts Obsidian wiki-links to point to the exact real file paths."""
-    
+    """Converts Obsidian wiki-links to point to real file paths."""
     def replace_link(match):
         target = match.group(1).strip()
         label = match.group(2).strip() if match.lastindex >= 2 and match.group(2) else target
         
-        # Clean target lookup
         lookup_key = os.path.basename(target).lower()
         if not lookup_key.endswith(".md"):
             lookup_key += ".md"
             
         if lookup_key in note_map:
             target_path = note_map[lookup_key]
-            # Calculate relative path from current file to target file
             current_dir = os.path.dirname(current_file_path)
             rel_to_target = os.path.relpath(target_path, start=current_dir)
-            # Normalize path separators for web/markdown links
             rel_to_target = rel_to_target.replace("\\", "/")
             return f'[{label}]({rel_to_target})'
         else:
-            # Fallback if note isn't found in index
             return f'[{label}]({target}.md)'
 
-    # Pattern for [[Target|Display Text]] or [[Target]]
     pattern = re.compile(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]')
     return pattern.sub(replace_link, body)
 
@@ -91,6 +82,25 @@ def convert_callouts(body):
             
     return "\n".join(new_lines)
 
+def wrap_in_raw(content):
+    """Wraps body content in Jekyll raw tags to prevent Liquid parser crashes."""
+    if not content.startswith("---"):
+        if "{% raw %}" not in content:
+            return "{% raw %}\n" + content + "\n{% endraw %}"
+        return content
+
+    parts = content.split("---", 2)
+    if len(parts) < 3:
+        return content
+
+    front_matter = f"---{parts[1]}---"
+    body = parts[2]
+
+    if "{% raw %}" not in body:
+        body = f"\n{{% raw %}}\n{body}\n{{% endraw %}}\n"
+
+    return front_matter + body
+
 def process_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         original_content = f.read()
@@ -109,10 +119,13 @@ def process_file(file_path):
         content = convert_wikilinks(content, file_path)
         content = convert_callouts(content)
 
+    # Wrap in raw tags to protect formulas, math, and curly braces from Jekyll
+    content = wrap_in_raw(content)
+
     if content != original_content:
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"Sanitized: {file_path}")
+        print(f"Sanitized and protected: {file_path}")
 
 def main():
     if not os.path.exists(NOTES_DIR):
