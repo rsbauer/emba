@@ -3,8 +3,8 @@ name: Deploy Jekyll to GitHub Pages
 on:
   push:
     branches:
-      - main   # Change to 'master' if your default branch is master
-  workflow_dispatch: # Allows manual trigger from the GitHub Actions tab
+      - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -27,13 +27,13 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Sanitize Obsidian Notes
-        run: python scripts/fix_notes.py
+      - name: Prepare Staging Build
+        run: python scripts/prepare_build.py
 
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:
-          source: './'
+          source: './_build_root'
           destination: './_site'
 
       - name: Upload artifact
