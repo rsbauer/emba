@@ -1,5 +1,5 @@
 ---
-modified: 2026-10-10T15:16
+modified: 2026-10-10T16:32
 created: 2026-07-17T21:34
 ---
 
@@ -36,6 +36,22 @@ MCP, RAG, API - to be discussed next week
 # Fresh Direct
 
 # Zara
+
+- Contract manufacturing
+- Controlling supply chain
+- Store experience
+- Omnichannel
+- Showrooming
+
+# Online Business Models
+
+**Priceline** name your price
+**Groupon/Mercata/Mobshop** aggregate order volume and demand discovery
+**eBay** peer to peer auction model
+
+# From retail to calalogs to QVC
+
+benefits of live stream shopping
 
 
 
