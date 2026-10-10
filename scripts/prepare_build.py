@@ -47,8 +47,15 @@ def rename_in_staging():
             if old_dir_path != new_dir_path:
                 os.rename(old_dir_path, new_dir_path)
 
+def convert_obsidian_math(body):
+    """ Converts Obsidian single-dollar inline math ($...$) to Kramdown/MathJax compatible \(_...\) """
+    # This regex matches single-dollar inline math while avoiding block math ($$...$$)
+    # It ensures there are no spaces immediately inside the dollar signs
+    inline_math_pattern = re.compile(r'(?<!\$)\$(?!\s)([^$\n]+?)(?<!\s)\$(?!\$)')
+    return inline_math_pattern.sub(r'\\(\1\\)', body)
+
 def process_staging_notes():
-    """Processes front matter, wikilinks, callouts, and disables Liquid parsing to protect LaTeX."""
+    """Processes front matter, wikilinks, callouts, and math delimiters."""
     notes_build_path = os.path.join(BUILD_DIR, NOTES_SUBDIR)
     if not os.path.exists(notes_build_path):
         return
@@ -97,7 +104,10 @@ def process_staging_notes():
 
                     fm = "\n".join(fixed_fm)
 
-                    # Convert Wikilinks
+                    # 1. Convert Obsidian Inline Math to MathJax-safe format
+                    body = convert_obsidian_math(body)
+
+                    # 2. Convert Wikilinks
                     def replace_wikilink(match):
                         target = match.group(1).strip()
                         label = match.group(2).strip() if match.lastindex >= 2 and match.group(2) else target
@@ -113,7 +123,7 @@ def process_staging_notes():
 
                     body = re.sub(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]', replace_wikilink, body)
 
-                    # Convert Callouts
+                    # 3. Convert Callouts
                     body = re.sub(r'>\s*\[!(\w+)\](?:\s+(.*))?', r'> **\2**', body)
 
                     content = f"---{fm}---{body}"
@@ -126,6 +136,6 @@ if __name__ == "__main__":
     build_staging()
     print("Slugifying files and folders in staging...")
     rename_in_staging()
-    print("Processing notes content in staging...")
+    print("Processing notes content and normalizing math in staging...")
     process_staging_notes()
     print("Staging preparation complete.")
