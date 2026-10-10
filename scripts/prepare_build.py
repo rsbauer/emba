@@ -18,7 +18,7 @@ def slugify(value):
 def build_staging():
     if os.path.exists(BUILD_DIR):
         shutil.rmtree(BUILD_DIR)
-    ignore_list = {'.git', '_site', BUILD_DIR, .github', 'scripts'}
+    ignore_list = {'.git', '_site', BUILD_DIR, '.github', 'scripts'}
     shutil.copytree(SOURCE_DIR, BUILD_DIR, ignore=shutil.ignore_patterns(*ignore_list))
 
 def rename_and_deduplicate():
