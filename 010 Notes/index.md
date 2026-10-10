@@ -1,13 +1,12 @@
 ---
-modified: 2026-09-26T19:31
-created: 2026-09-01T22:47
+layout: default
+title: Course Notes Index
 ---
-# Executive MBA Notes 
 
-```dataview
-LIST rows.file.link
-FROM "002 MBA/010 Notes" 
-where file.name != "index" and file.name != file.folder
-FLATTEN regexreplace(file.folder, "^[^/]*/[^/]*/?", "") AS trimmed_folder
-group by trimmed_folder as "Folder"
-```
+# Course & Bootcamp Notes
+
+Select a category below to explore the notes:
+
+* [2026 Summer Bootcamp](./2026-summer-bootcamp/)
+* [Master Class & Student Experience](./2026-master-class-student-experience/)
+* [Managerial Economics & Fall Courses](./2026-fall/)
