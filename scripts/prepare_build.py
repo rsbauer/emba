@@ -110,7 +110,9 @@ def process_staging_notes():
                         if lookup in slug_map:
                             target_rel = slug_map[lookup]
                             current_dir = os.path.dirname(os.path.relpath(file_path, start=BUILD_DIR)).replace("\\", "/")
-                            return f'[{label}]({os.path.relpath(target_rel, start=current_dir).replace("\\", "/")})'
+                            raw_rel_path = os.path.relpath(target_rel, start=current_dir)
+                            clean_rel_path = raw_rel_path.replace("\\", "/")
+                            return f'[{label}]({clean_rel_path})'
                         return f'[{label}]({slugify(target)}.md)'
 
                     body = re.sub(r'\[\[([^|\]]+)(?:\|([^\]]+))?\]\]', replace_wikilink, body)
